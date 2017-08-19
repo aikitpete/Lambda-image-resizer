@@ -12,13 +12,14 @@ const URL = process.env.URL;
 
 exports.handler = function(event, context, callback) {
   const key = event.queryStringParameters.key;
+  //console.log("Received key:",key);
   const match = key.match(/(\d+)x(\d+)\/(.*)\.(.*)/);
   const width = parseInt(match[1], 10);
   const height = parseInt(match[2], 10);
   const originalKey = match[3];
-  const originalExtenstion = match[4];
+  const originalExtension = match[4];
 
-  S3.getObject({Bucket: BUCKET_ORIGIN, Key: originalKey}).promise()
+  S3.getObject({Bucket: BUCKET_ORIGIN, Key: key}).promise()
     .then(data => Sharp(data.Body)
       .resize(width, height)
       .toBuffer()
@@ -26,7 +27,7 @@ exports.handler = function(event, context, callback) {
     .then(buffer => S3.putObject({
         Body: buffer,
         Bucket: BUCKET_DESTINATION,
-        ContentType: 'image/${originalExtenstion}',
+        ContentType: 'image/${originalExtension}',
         CacheControl: 'max-age=12312312',
         Key: key,
       }).promise()
