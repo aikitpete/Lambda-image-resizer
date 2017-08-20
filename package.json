@@ -7,7 +7,6 @@
   "license": "Apache-2.0",
   "main": "index.js",
   "dependencies": {
-    "sharp": "^0.17.3"
   },
   "devDependencies": {
     "aws-sdk": "^2.36.0"
